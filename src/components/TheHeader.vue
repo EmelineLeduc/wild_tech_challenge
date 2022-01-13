@@ -8,4 +8,3 @@
     <h1 class="text-4xl ml-4 pt-2 font-bold">Les Argonautes</h1>
   </div>
 </template>
-<script setup lang="ts"></script>
