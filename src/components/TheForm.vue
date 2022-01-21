@@ -22,8 +22,8 @@
     </form>
     <h2 class="text-2xl font-medium mt-16 mb-10">Membres de l'équipage</h2>
     <div class="flex-wrap grid grid-cols-3 gap-4 text-gray-500">
-      <p v-for="(name, id) in argonautsList" :key="id">
-        {{ name }}
+      <p v-for="(argonaut, id) in argonautsList" :key="id">
+        {{ argonaut.name }}
       </p>
     </div>
   </div>
@@ -33,13 +33,25 @@
 import { ref } from "vue";
 
 const inputName = ref<string>("");
-const argonautsList = ref<Array<{ id: number; name: string }>>([
-  { id: 0, name: "Eleftheria" },
-  { id: 1, name: "Gennadios" },
-  { id: 2, name: "Lysimachos" },
-  { id: 3, name: "Emeline" },
-  { id: 4, name: "Antoine" },
-]);
+const argonautsList = ref<Array<{ id: number; name: string }>>([]);
 
-const addNewArgonaut = () => {};
+const loadListArgonauts = async () => {
+  await fetch(`http://localhost:4000/api/argonaut`)
+    .then((res) => res.json())
+    .then((data) => (argonautsList.value = data));
+};
+
+const addNewArgonaut = async () => {
+  await fetch(`http://localhost:4000/api/argonaut`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name: inputName.value }),
+  });
+  inputName.value = "";
+  loadListArgonauts();
+};
+
+loadListArgonauts();
 </script>
